@@ -58,7 +58,9 @@ class MovieController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $movie = Movie::findOrFail($id); // Mengambil movie berdasarkan ID
+        $genres = Genre::all(); // Mengambil semua genre
+        return view('movies.edit', compact('movie', 'genres')); // Mengirim data ke view
     }
 
     /**
@@ -66,7 +68,19 @@ class MovieController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'synopsis' => 'required|string',
+            'poster' => 'nullable|string',
+            'year' => 'required|numeric|digits:4',
+            'available' => 'required|boolean',
+            'genre_id' => 'required|exists:genres,id',
+        ]);
+    
+        $movie = Movie::findOrFail($id); // Mengambil movie berdasarkan ID
+        $movie->update($request->all()); // Memperbarui data movie
+    
+        return redirect()->route('movies.index')->with('success', 'Movie berhasil diperbarui.'); // Redirect setelah update
     }
 
     /**
@@ -74,6 +88,9 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $movie = Movie::findOrFail($id); // Mengambil movie berdasarkan ID
+        $movie->delete(); // Menghapus movie
+    
+        return redirect()->route('movies.index')->with('success', 'Movie berhasil dihapus.'); // Redirect setelah delete
     }
 }

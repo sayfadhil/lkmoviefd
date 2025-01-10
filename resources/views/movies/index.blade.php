@@ -62,11 +62,15 @@
                                 </span>
                             </td>
                             
-                            <!-- Aksi -->
-                            <td class="px-6 py-4 text-right text-sm border-b">
-                                <a href="#" class="text-blue-600 hover:text-blue-900 font-medium">Edit</a>
-                                <a href="#" class="ml-4 text-red-600 hover:text-red-900 font-medium">Hapus</a>
-                            </td>
+<!-- Aksi -->
+<td class="px-6 py-4 text-right text-sm border-b">
+    <a href="{{ route('movies.edit', $movie->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">Edit</a>
+    <form action="{{ route('movies.destroy', $movie->id) }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus movie ini?');" class="ml-4 text-red-600 hover:text-red-900 font-medium">Hapus</button>
+    </form>
+</td>
                         </tr>
                     @empty
                         <tr>
